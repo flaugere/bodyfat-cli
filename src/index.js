@@ -3,6 +3,7 @@ const inquirer = require("inquirer");
 const { Command, flags } = require("@oclif/command");
 const SkinZone = require("./enum/skinzone");
 const Gender = require("./enum/gender");
+const Method = require("./enum/method");
 
 class BodyfatCommand extends Command {
   async run() {
@@ -35,84 +36,31 @@ class BodyfatCommand extends Command {
       SkinZone.AXILLARY,
       SkinZone.THIGH
     );
-    if (Gender.FEMALE == responses.gender) {
-      if (
-        !!skins[SkinZone.TRICEPS] &&
-        !!skins[SkinZone.SUPRAILIAC] &&
-        !!skins[SkinZone.THIGH]
-      ) {
-        this.log(
-          `JP3 : ${bodyfat.JP3Woman.calculate(
-            skins[SkinZone.TRICEPS],
-            skins[SkinZone.SUPRAILIAC],
-            skins[SkinZone.THIGH],
+    for (var methodName in Method) {
+      const methodByGender = Method[methodName];
+      methodByGender.forEach((method) => {
+        if (method.gender === responses.gender) {  
+          const percentage = method.algo.calculate(
+            ...this.getSkinsValues(method.skins, skins),
             responses.age
-          )}`
-        );
-      }
+          );
+          if (!!percentage) {
+            this.log(
+              `${methodName} : ${percentage} %`
+            );
+            return;
+          }
+          this.log(`${methodName} : not enough values`)
+        }
+      });
     }
-    if (
-      !!skins[SkinZone.TRICEPS] &&
-      !!skins[SkinZone.SUPRAILIAC] &&
-      !!skins[SkinZone.THIGH] &&
-      !!skins[SkinZone.ABDOMEN]
-    ) {
-      let method =
-        Gender.FEMALE == responses.gender ? bodyfat.JP4Woman : bodyfat.JP4Man;
-      this.log(
-        `JP4 : ${method.calculate(
-          skins[SkinZone.TRICEPS],
-          skins[SkinZone.SUPRAILIAC],
-          skins[SkinZone.THIGH],
-          skins[SkinZone.ABDOMEN],
-          responses.age
-        )}`
-      );
-    }
-    if (
-      !!skins[SkinZone.TRICEPS] &&
-      !!skins[SkinZone.SUPRAILIAC] &&
-      !!skins[SkinZone.THIGH] &&
-      !!skins[SkinZone.ABDOMEN] &&
-      !!skins[SkinZone.CHEST] &&
-      !!skins[SkinZone.AXILLARY] &&
-      !!skins[SkinZone.SUBSCAPULAR]
-    ) {
-      let method =
-        Gender.FEMALE == responses.gender ? bodyfat.JP7Woman : bodyfat.JP7Man;
-      this.log(
-        `JP7 : ${method.calculate(
-          skins[SkinZone.TRICEPS],
-          skins[SkinZone.SUPRAILIAC],
-          skins[SkinZone.THIGH],
-          skins[SkinZone.ABDOMEN],
-          skins[SkinZone.CHEST],
-          skins[SkinZone.AXILLARY],
-          skins[SkinZone.SUBSCAPULAR],
-          responses.age
-        )}`
-      );
-    }
-    if (
-      !!skins[SkinZone.TRICEPS] &&
-      !!skins[SkinZone.BICEPS] &&
-      !!skins[SkinZone.SUBSCAPULAR] &&
-      !!skins[SkinZone.SUPRAILIAC]
-    ) {
-      let method =
-        Gender.FEMALE == responses.gender
-          ? bodyfat.DurninWoman
-          : bodyfat.DurninMan;
-      this.log(
-        `Durnin : ${method.calculate(
-          skins[SkinZone.TRICEPS],
-          skins[SkinZone.BICEPS],
-          skins[SkinZone.SUBSCAPULAR],
-          skins[SkinZone.SUPRAILIAC],
-          responses.age
-        )}`
-      );
-    }
+  }
+  getSkinsValues(skinZones, skinsValues) {
+    let values = [];
+    skinZones.forEach(skinZone => {
+      values.push(skinsValues[skinZone]);
+    })
+    return values;
   }
   async getSkinZone(...skins) {
     let choices = [];
