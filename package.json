@@ -8,14 +8,14 @@
   },
   "bugs": "https://github.com/flaugere/bodyfat-cli/issues",
   "dependencies": {
-    "@oclif/command": "^1.6.1",
-    "@oclif/config": "^1.15.1",
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^2.2.3",
     "bodyfat": "0.0.10",
-    "inquirer": "^7.1.0"
+    "inquirer": "^7.3.3"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.22.2",
+    "@oclif/dev-cli": "^1.24.1",
     "eslint": "^5.16.0",
     "eslint-config-oclif": "^3.1.0"
   },
