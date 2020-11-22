@@ -1,7 +1,7 @@
 {
   "name": "bodyfat-cli",
   "description": "Bodyfat calculator client",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "David FLAUGERE @flaugere",
   "bin": {
     "bodyfat": "./bin/run"
