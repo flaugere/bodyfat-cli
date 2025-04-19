@@ -10,7 +10,7 @@
   "dependencies": {
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
-    "@oclif/plugin-help": "^2.2.3",
+    "@oclif/plugin-help": "^6.2.27",
     "bodyfat": "0.0.10",
     "inquirer": "^7.3.3"
   },
